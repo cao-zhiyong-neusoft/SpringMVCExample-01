@@ -106,7 +106,7 @@ public interface CountryEntityMapper extends CommonCountMapper, CommonDeleteMapp
 	default Optional<CountryEntity> selectByPrimaryKey(String mstcountrycd_) {
 		return selectOne(c -> c.where(mstcountrycd, isEqualTo(mstcountrycd_)));
 	}
-
+	
 	@Generated(value = "org.mybatis.generator.api.MyBatisGenerator", date = "2023-11-14T00:52:28.56927+09:00", comments = "Source Table: public.country")
 	default int update(UpdateDSLCompleter completer) {
 		return MyBatis3Utils.update(this::update, countryEntity, completer);

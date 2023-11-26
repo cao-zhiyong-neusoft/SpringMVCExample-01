@@ -1,10 +1,14 @@
 package com.example.servingwebcontent.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.servingwebcontent.entity.CountryEntity;
+import com.example.servingwebcontent.entity.Customer;
+import com.example.servingwebcontent.form.CountryForm;
 import com.example.servingwebcontent.form.CountrySearchForm;
 import com.example.servingwebcontent.repository.CountryEntityMapper;
 import com.google.gson.Gson;
@@ -65,5 +71,47 @@ public class CountryController {
 		// Then return a success message or the saved entity
 		return "Country created successfully";
 	}
+	
+	@GetMapping("/countrylist")
+	public String list(Model model) {
+		String names = "countrys";
+		List<CountryEntity> list = mapper.select(SelectDSLCompleter.allRows());
+		
+		model.addAttribute(names, list);
+		model.addAttribute("countryForm", new CountryForm());
+		return "list";
+	}
+	
+	@PostMapping("/addCountry")
+	@ResponseBody
+//	public String addCountry(CountryForm countryForm,Model model) {
+	public String addCountry(CountryForm countryForm) {
 
+//		if (bindingResult.hasErrors()) {
+//            return "list";
+//        }
+
+		CountryEntity countryEntity = new CountryEntity();
+		
+		countryEntity.setMstcountrycd(countryForm.getMstCountryCD());
+		countryEntity.setMstcountrynanme(countryForm.getMstCountryNanme());
+		
+		countryForm.setMstCountryCD("");
+		countryForm.setMstCountryNanme("");
+		
+		mapper.insert(countryEntity);
+		
+//		String names = "countrys";
+////		List<CountryEntity> list = mapper.select(SelectDSLCompleter.allRows());
+//		
+//		Optional<CountryEntity> countryEntityresult=mapper.selectByPrimaryKey(countryEntity.getMstcountrycd());
+//		countryEntity.setMstcountrycd(countryEntityresult.get().getMstcountrycd());
+//		countryEntity.setMstcountrynanme(countryEntityresult.get().getMstcountrynanme());
+//		List<CountryEntity> list=new ArrayList<CountryEntity>();
+//		list.add(countryEntity);
+//		model.addAttribute(names, list);
+//		model.addAttribute("countryForm", new CountryForm());
+//		
+		return "teststete";
+	}
 }
